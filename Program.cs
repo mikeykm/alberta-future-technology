@@ -8,10 +8,9 @@ namespace csharp
     {
         static void Main(string[] args)
         {
-            Test obj = new Test();
-            obj.test1();
-            Console.WriteLine("------------");
-            test2();
+            //test2();
+            ReturnAllPossible ap = new ReturnAllPossible();
+            ap.ReturnAll(new int[]{1,1,2,0,1,1,2},4,4);
         }
         public static void test2(){
             List<int> list = new List<int>();
@@ -42,22 +41,6 @@ namespace csharp
                 }    
             }
             return result;
-        }
-    }
-    class Test{
-        public void test1(){
-            int[] input= new int[]{1,2,3,4};
-            if(input.Length%2==0){
-                Console.WriteLine("even return 0");
-            }
-            if(input.Length%2==1){
-                int result = 0;
-                for(int i=0;i<=input.Length-1;i=i+2){
-                    result=result^input[i];
-                }
-                Console.WriteLine(result);
-            }
-
         }
     }
 }
