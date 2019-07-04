@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace csharp
 {
@@ -8,18 +9,29 @@ namespace csharp
     {
         static void Main(string[] args)
         {
-
-            int[] arr = new int[] { 1, 2, 1, 0, 1 };
-            CombArray(arr, 3, 2);
+            Console.WriteLine("----");
+            //Console.WriteLine( Math.Ceiling((double)1/2));
+            //Console.WriteLine(cookies(9, new int[] { 1, 62, 14 }));
+            Console.WriteLine(cookies(7, new int[] { 1, 2, 3, 9, 10, 12 }));
+            //CombArrayZeroOneTwo(new int[] { 2, 1, 0, 1 }, 2, 2);
+            //Console.WriteLine(swap1("1100"));
+            //var hs = permute("abc".ToArray(), 0, 2, new HashSet<string>());
+            //foreach (var item in hs)
+            //  Console.WriteLine(item);
+            //int[][] arr = new int[3][] { new int[] { 4, 8, 2 }, new int[] { 4, 5, 7 }, new int[] { 6, 1, 6 } };
+            //Console.WriteLine(weightedUniformStrings("abccddde", new int[3]));
+            //Console.WriteLine(beautifulBinaryString("0101010"));
+            //Console.WriteLine('a'>'A');
+            //Console.WriteLine(8/3);
+            //PrintAllCombinations pa = new PrintAllCombinations();
+            //Console.WriteLine(sockMerchant(4, new int[] { 1, 1, 3, 1, 2, 1, 3, 3, 3, 3 }));
+            //pa.printAllCombinations();
+            //CombArray(arr, 3, 2);
             //   Console.WriteLine(recursiveSum(arr, 10, 0, new Dictionary<string, int>()));
             //insertionSort2(4, new int[] { 4, 4, 3, 4 });
             //Console.WriteLine(string.Compare("b","b"));   
             //testQuickSort(new int[] { 1, 2, 3, 4, 5, 5 }, 0, 5);
             // var arr = quicksort(new int[] { 1, 7, 8, 9,2, 10, 5 }, 0, 6);
-            foreach (var item in arr)
-            {
-                //Console.WriteLine(item);
-            }
             //testSortArr(new int[] { 4, 2, 3, 1, 5 });
             //testSortedSet();
             //testSortedList();
@@ -312,7 +324,7 @@ namespace csharp
                 }
             }
             //foreach (var item in result)
-              //  Console.WriteLine(item);
+            //  Console.WriteLine(item);
             List<string> finalResult = new List<string>();
             List<string> finalResultTwo = new List<string>();
             for (int i = 0; i <= result.Count - 1; i++)
@@ -376,5 +388,977 @@ namespace csharp
             }
             return temp;
         }
+        public static int DynamicEqual(int[] arr)
+        {
+            arr = arr.OrderBy(o => o).ToArray();
+            int result = 0;
+            long sum = long.MaxValue;
+            for (int k = 0; k <= 3; k++)
+            {
+                result = 0;
+                for (int i = arr.Length - 1; i >= 0; i--)
+                {
+                    result += CountResult(arr[i] - arr[0] + k);
+                }
+                sum = sum < result ? sum : result;
+            }
+            return (int)sum;
+        }
+        private static int CountResult(int input)
+        {
+            int result = 0;
+            result += input / 5 + (input % 5) / 2 + input % 5 % 2 / 1;
+            return result;
+        }
+        public static long find_min_actions(int[] cookies)
+        {
+
+            cookies = cookies.OrderBy(o => o).ToArray();
+
+            long sum = long.MaxValue;
+
+            for (int b = 0; b < 3; b++)
+            {
+                int current_sum = 0;
+                for (int i = 0; i < cookies.Length; i++)
+                {
+                    int delta = cookies[i] - cookies[0] + b;
+                    current_sum += (int)delta / 5 + delta % 5 / 2 + delta % 5 % 2 / 1;
+                }
+                sum = Math.Min(current_sum, sum);
+            }
+
+            return sum;
+        }
+        public static int CountArray(int n, int k, int x)
+        {
+            for (int i = 0; i <= n - 3; i++)
+            {
+
+            }
+            return 0;
+        }
+        public static void insertionSort(int[] A)
+        {
+            var j = 0;
+            for (var i = 1; i < A.Length; i++)
+            {
+                var value = A[i];
+                j = i - 1;
+                while (j >= 0 && value < A[j])
+                {
+                    A[j + 1] = A[j];
+                    j = j - 1;
+                }
+                A[j + 1] = value;
+            }
+            Console.WriteLine(string.Join(" ", A));
+        }
+        static int runningTime(int[] arr)
+        {
+            int temp;
+            int countRuntime = 0;
+            for (int i = 1; i < arr.Length; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (arr[j] > arr[i])
+                    {
+                        temp = arr[j];
+                        arr[j] = arr[i];
+                        arr[i] = temp;
+                        countRuntime++;
+                    }
+                }
+                Console.WriteLine(string.Join(" ", arr));
+            }
+
+            return countRuntime;
+        }
+        public static string superReducedString(string s)
+        {
+            for (int i = 0; i <= s.Length - 2; i++)
+            {
+                if (s.Substring(i, 1) == s.Substring(i + 1, 1))
+                {
+                    s = s.Substring(0, i) + s.Substring(i + 2);
+                    i = -1;
+                }
+            }
+            return s;
+
+        }
+        static int camelcase(string s)
+        {
+            char[] arr = s.ToCharArray();
+            if (s.Trim() == "")
+                return 0;
+            return arr.Where(o => o < 'a').Count() + 1;
+
+
+        }
+        static int minimumNumber(int n, string password)
+        {
+            bool hasNumber = false;
+            bool hasLower = false;
+            bool hasUpper = false;
+            bool hasSpecial = false;
+            int result = 0;
+            foreach (char item in password.ToCharArray())
+            {
+                if (item >= '0' && item <= '9')
+                    hasNumber = true;
+                else if (item >= 'a' && item <= 'z')
+                    hasLower = true;
+                else if (item >= 'A' && item <= 'Z')
+                    hasUpper = true;
+                else
+                    hasSpecial = true;
+            }
+            if (!hasNumber)
+                result += 1;
+            if (!hasLower)
+                result += 1;
+            if (!hasUpper)
+                result += 1;
+            if (!hasSpecial)
+                result += 1;
+            return ((6 - password.Length) < result ? result : (6 - password.Length));
+        }
+        static int[] icecreamParlor(int m, int[] arr)
+        {
+            int[] result = new int[2];
+            for (int i = 0; i <= arr.Length - 1; i++)
+            {
+                if (arr.Any(o => o == (m - arr[i])))
+                {
+                    result[0] = i + 1;
+                    result[1] = Array.IndexOf(arr, m - arr[i], i + 1) + 1;
+                    break;
+                }
+
+            }
+            return result;
+
+        }
+
+        static void countApplesAndOranges(int s, int t, int a, int b, int[] apples, int[] oranges)
+        {
+            int apple = 0;
+            int orange = 0;
+            foreach (var item in apples)
+            {
+                if (item + a >= s && item + a <= t)
+                    apple++;
+            }
+            foreach (var item in oranges)
+            {
+                if (item + b >= s && item + b <= t)
+                    orange++;
+            }
+            Console.WriteLine(apple);
+            Console.WriteLine(orange);
+
+        }
+        static string kangaroo(int x1, int v1, int x2, int v2)
+        {
+            if (v1 == v2)
+            {
+                if (x1 == x2)
+                    return "YES";
+                else
+                    return "NO";
+            }
+            else
+            {
+                if (x1 > x2 && v1 > v2 || x1 < x2 && v1 < v2)
+                    return "NO";
+                if ((x1 - x2) % (v1 - v2) == 0)
+                    return "YES";
+                else
+                    return "NO";
+            }
+        }
+        public static int getTotalX(List<int> a, List<int> b)
+        {
+            a = a.OrderBy(o => o).ToList();
+            b = b.OrderBy(o => o).ToList();
+            int min = a.Last();
+            int max = b.First();
+            if (min > max)
+                return 0;
+            int sum = 0;
+            for (int i = min; i <= max; i++)
+            {
+                bool qulified = true;
+                for (int k = 0; k <= a.Count() - 1; k++)
+                {
+                    if (i % a[k] != 0)
+                    {
+                        qulified = false;
+                        break;
+                    }
+                }
+                for (int k = 0; k <= b.Count() - 1; k++)
+                {
+                    if (b[k] % i != 0)
+                    {
+                        qulified = false;
+                        break;
+                    }
+
+                }
+                if (qulified)
+                    sum++;
+            }
+            return sum;
+        }
+        static int[] breakingRecords(int[] scores)
+        {
+            int[] result = new int[2];
+            int lower = 0;
+            int higher = 0;
+            int min = scores[0];
+            int max = scores[0];
+            for (int i = 1; i <= scores.Length - 1; i++)
+            {
+                if (scores[i] > max)
+                {
+                    max = scores[i];
+                    higher++;
+                }
+                if (scores[i] < min)
+                {
+                    min = scores[i];
+                    lower++;
+                }
+            }
+            result[0] = higher;
+            result[1] = lower;
+            return result;
+
+        }
+        static int birthday(List<int> s, int d, int m)
+        {
+            int result = 0;
+            if (s.Count < m)
+                return 0;
+            for (int i = 0; i <= s.Count - 1; i++)
+            {
+                if (i + m > s.Count)
+                    break;
+                int days = 0;
+                for (int j = i; j <= i + m - 1; j++)
+                {
+                    days += s[j];
+                }
+                if (days == d)
+                    result++;
+            }
+            return result;
+        }
+        static int divisibleSumPairs(int n, int k, int[] ar)
+        {
+            int result = 0;
+            for (int i = 0; i <= ar.Length - 1; i++)
+            {
+                for (int j = i + 1; j <= ar.Length - 1; j++)
+                {
+                    if ((ar[i] + ar[j]) % k == 0)
+                        result++;
+                }
+            }
+            return result;
+        }
+
+        static int migratoryBirds(List<int> arr)
+        {
+            int result = arr[0];
+            arr = arr.OrderBy(o => o).ToList();
+            int max = 1;
+            int previousMax = 1;
+            int previous = arr[0];
+            for (int i = 1; i <= arr.Count - 1; i++)
+            {
+                if (arr[i] == previous)
+                {
+                    max++;
+                }
+                else
+                {
+                    if (max > previousMax)
+                    {
+                        previousMax = max;
+                        result = arr[i - 1];
+                    }
+                    previous = arr[i];
+                    max = 1;
+                }
+            }
+            if (max > previousMax)
+                return arr[arr.Count - 1];
+            return result;
+        }
+
+        static string dayOfProgrammer(int year)
+        {
+            string result = "";
+            if (year % 4 == 0 && year % 100 != 0)
+            {
+                result = "12";
+            }
+            else if (year % 400 == 0)
+                result = "12";
+            else
+                result = "13";
+            result += ".09." + year;
+            return result;
+        }
+        static void bonAppetit(List<int> bill, int k, int b)
+        {
+            int sum = 0;
+            for (int i = 0; i <= bill.Count - 1; i++)
+            {
+                sum += k == i ? 0 : bill[i];
+            }
+
+            Console.WriteLine((b - sum / 2) == 0 ? "Bon Appetit" : (b - sum / 2).ToString());
+
+        }
+        static int sockMerchant(int n, int[] ar)
+        {
+            int result = 0;
+            ar = ar.OrderBy(o => o).ToArray();
+            for (int i = 0; i < ar.Length; i++)
+            {
+                int sum = 1;
+                for (int j = i + 1; j < ar.Length; j++)
+                {
+                    if (ar[i] == ar[j])
+                        sum++;
+                    else
+                    {
+                        result += sum > 1 ? sum / 2 : 0;
+                        i = j - 1;
+                        break;
+                    }
+                    if (j == ar.Length - 1)
+                    {
+                        i = j;
+                        result += sum > 1 ? sum / 2 : 0;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        static int pageCount(int n, int p)
+        {
+            /*
+             * Write your code here.
+             */
+            if (n - p > p - 1)
+                return p / 2;
+            else
+            if (n % 2 == 0)
+                return (n - p + 1) / 2;
+            else
+                return (n - p) / 2;
+
+        }
+
+        static int countingValleys(int n, string s)
+        {
+            int result = 0;
+            char[] arr = s.ToCharArray();
+            int sum = 0;
+            bool isValley = false;
+            for (int i = 0; i <= arr.Length - 1; i++)
+            {
+                if (sum < 0)
+                    isValley = true;
+                sum += arr[i] == 'U' ? 1 : (arr[i] == 'D' ? -1 : 0);
+                if (isValley && sum >= 0)
+                {
+                    result++;
+                }
+                if (sum >= 0)
+                    isValley = false;
+            }
+            return result;
+        }
+        static int getMoneySpent(int[] keyboards, int[] drives, int b)
+        {
+            /*
+             * Write your code here.
+             */
+            int sum = 0;
+            for (int i = 0; i <= keyboards.Length - 1; i++)
+            {
+                for (int j = 0; j <= drives.Length - 1; j++)
+                {
+                    if (keyboards[i] + drives[j] <= b && keyboards[i] + drives[j] >= sum)
+                    {
+                        sum = keyboards[i] + drives[j];
+                    }
+                }
+            }
+            if (sum == 0)
+                return -1;
+            return sum;
+        }
+
+        static string catAndMouse(int x, int y, int z)
+        {
+            int a = Math.Abs(x - z);
+            int b = Math.Abs(y - z);
+            if (a == b)
+                return "Mouse C";
+            if (a > b)
+                return "Cat B";
+            if (b > a)
+                return "Cat A";
+            return "";
+
+        }
+        static int formingMagicSquare(int[][] s)
+        {
+            List<List<int>> squares = new List<List<int>>
+{ new List<int> {8,1,6,3,5,7,4,9,2 },
+  new List<int> {6,1,8,7,5,3,2,9,4 },
+  new List<int> {4,9,2,3,5,7,8,1,6 },
+  new List<int> {2,9,4,7,5,3,6,1,8 },
+  new List<int> {8,3,4,1,5,9,6,7,2 },
+  new List<int> {4,3,8,9,5,1,2,7,6 },
+  new List<int> {6,7,2,1,5,9,8,3,4 },
+  new List<int> {2,7,6,9,5,1,4,3,8 }};
+
+            var arr = s.SelectMany(o => o).ToArray();
+            var result = squares.Select(o => o.Zip(arr, (a, b) => (a - b)).Sum()).Min();
+            return result;
+        }
+        public static int pickingNumbers(List<int> a)
+        {
+            int result = 0;
+            for (int i = 0; i <= a.Count - 1; i++)
+            {
+                int sum1 = 0;
+                int sum2 = 0;
+                for (int j = 0; j <= a.Count - 1; j++)
+                {
+                    if (a[i] >= a[j] && a[i] - a[j] <= 1)
+                        sum1++;
+                    if (a[i] <= a[j] && a[j] - a[i] <= 1)
+                        sum2++;
+                }
+                int sum = sum1 > sum2 ? sum1 : sum2;
+                result = sum > result ? sum : result;
+            }
+            return result;
+        }
+
+        static int[] climbingLeaderboard(int[] scores, int[] alice)
+        {
+            int[] arr = new HashSet<int>(scores).ToArray();
+            alice = alice.OrderBy(o => o).ToArray();
+            List<int> result = new List<int>();
+            int k = arr.Length - 1;
+            for (int j = 0; j < alice.Length; j++)
+            {
+                for (int i = k; i >= 0; i--)
+                {
+                    if (alice[j] > arr[0])
+                    {
+                        result.Add(1);
+                        break;
+                    }
+                    if (alice[j] < arr[arr.Length - 1])
+                    {
+                        result.Add(arr.Length + 1);
+                        break;
+                    }
+                    if (arr[i] == alice[j])
+                    {
+                        result.Add(i + 1);
+                        k = i;
+                        break;
+                    }
+                    if (arr[i] < alice[j] && arr[i - 1] > alice[j])
+                    {
+                        k = i;
+                        result.Add(i + 1);
+                        break;
+                    }
+
+                }
+            }
+            foreach (var item in result)
+                Console.WriteLine(item);
+            return result.ToArray();
+        }
+        static int marsExploration(string s)
+        {
+            int sum = 0;
+            for (int i = 0; i < s.Length - 1;)
+            {
+                string temp = s.Substring(i, 3);
+                i = i + 3;
+                if (temp == "SOS")
+                    continue;
+                else
+                {
+                    if (temp.Substring(0, 1) != "S")
+                        sum++;
+                    if (temp.Substring(1, 1) != "O")
+                        sum++;
+                    if (temp.Substring(2, 1) != "S")
+                        sum++;
+                }
+            }
+            return sum;
+        }
+
+        static string hackerrankInString(string s)
+        {
+            int k = 0;
+            string[] arr = new string[] { "h", "a", "c", "k", "e", "r", "r", "a", "n", "k" };
+            for (int i = 0; i < s.Length; i++)
+            {
+                for (int j = 0; j < arr.Length; j++)
+                {
+                    k = s.IndexOf(arr[j]);
+                    if (k >= 0)
+                    {
+                        if (j == arr.Length - 1)
+                            return "YES";
+                        i = 0;
+                        s = s.Substring(k + 1);
+                    }
+                    else
+                        return "NO";
+                }
+            }
+            return "";
+        }
+
+        static string pangrams(string s)
+        {
+            char[] alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+            foreach (char item in alphabet)
+            {
+                if (s.ToLower().IndexOf(item) < 0)
+                {
+                    return "not pangram";
+                }
+            }
+            return "pangram";
+        }
+        static int alternate(string s)
+        {
+            HashSet<char> hs = new HashSet<char>(s.ToCharArray());
+            int max = 0;
+            for (int i = 0; i < hs.Count; i++)
+            {
+                for (int j = i + 1; j < hs.Count; j++)
+                {
+                    string pattern = "([^" + hs.ElementAt(i) + hs.ElementAt(j) + "])";
+                    string temp = Regex.Replace(s, pattern, "");
+                    if (isTwoCharactors(temp))
+                    {
+                        max = max > temp.Length ? max : temp.Length;
+                    }
+                }
+            }
+            return max;
+        }
+        static bool isTwoCharactors(string s)
+        {
+            for (int i = 0; i < s.Length - 1; i++)
+            {
+                if (s[i] == s[i + 1])
+                    return false;
+            }
+            return true;
+        }
+        static string caesarCipher(string s, int k)
+        {
+            string all = "abcdefghijklmnopqrstuvwxyz";
+            //            char[] arr =all.ToCharArray();
+            List<string> arr = new List<string>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                int index = all.IndexOf(s.Substring(i, 1).ToLower());
+                if (index >= 0)
+                {
+                    int newIndex = index + k > 25 ? (index + k) % 26 : index + k;
+                    string temp = (all.Substring(newIndex, 1));
+                    if (char.IsUpper(char.Parse(s.Substring(i, 1))))
+                    {
+                        temp = temp.ToUpper();
+                    }
+                    arr.Add(temp);
+                }
+                else
+                    arr.Add(s.Substring(i, 1));
+            }
+            return string.Join("", arr);
+
+        }
+
+        static string[] weightedUniformStrings(string s, int[] queries)
+        {
+            string all = "abcdefghijklmnopqrstuvwxyz";
+            char[] arr = s.ToCharArray();
+            HashSet<int> list = new HashSet<int>();
+            int sum = all.IndexOf(arr[0]) + 1;
+            char previous = arr[0];
+            list.Add(sum);
+            int index = sum;
+            for (int i = 1; i < s.Length; i++)
+            {
+                if (arr[i] == previous)
+                {
+                    sum += index;
+                }
+                else
+                {
+                    index = arr[i] - 'a' + 1;
+                    sum = index;
+                }
+                list.Add(sum);
+                previous = arr[i];
+            }
+            string[] resultstr = new string[queries.Length];
+
+            for (int i = 0; i < queries.Length; i++)
+            {
+                if (list.Contains(queries[i]))
+                    resultstr[i] = "Yes";
+                else
+                    resultstr[i] = "No";
+            }
+            return resultstr;
+        }
+        static void separateNumbers(string s)
+        {
+            string first = "";
+            string temp = "";
+            for (int i = 1; i <= s.Length / 2; i++)
+            {
+                first = s.Substring(0, i);
+                long x = long.Parse(first);
+                temp = "";
+                while (true)
+                {
+                    if (temp.Length >= s.Length)
+                        break;
+                    temp += x.ToString();
+                    x++;
+                }
+                if (temp == s)
+                {
+                    break;
+                }
+
+            }
+            if (temp == s)
+            {
+                Console.WriteLine("YES " + first);
+            }
+            else
+                Console.WriteLine("NO");
+        }
+        static string funnyString(string s)
+        {
+            byte[] bt = System.Text.Encoding.ASCII.GetBytes(s);
+            byte[] bt1 = bt.Reverse().ToArray();
+            bool isNotFunny = false;
+            for (int i = 0; i <= bt.Length - 2; i++)
+            {
+                if (Math.Abs(bt[i] - bt[i + 1]) != Math.Abs(bt1[i] - bt1[i + 1]))
+                {
+                    isNotFunny = true;
+                    break;
+                }
+            }
+            if (isNotFunny)
+                return "Not Funny";
+            else
+                return "Funny";
+        }
+        static int gemstones(string[] arr)
+        {
+            string all = "abcdefghijklmnopqrstuvwxyz";
+            int result = 0;
+            foreach (var item in all.ToCharArray())
+            {
+                bool include = true;
+                foreach (var item1 in arr)
+                {
+                    if (!item1.Contains(item))
+                    {
+                        include = false;
+                        break;
+                    }
+                }
+                if (include)
+                    result++;
+            }
+            return result;
+
+        }
+
+        static int alternatingCharacters(string s)
+        {
+            string temp = s;
+            while (true)
+            {
+                if (s.IndexOf("AA") < 0 && s.IndexOf("BB") < 0)
+                    break;
+                s = s.Replace("AA", "A");
+                s = s.Replace("BB", "B");
+            }
+            return temp.Length - s.Length;
+
+        }
+        static int beautifulBinaryString(string b)
+        {
+            var a = b.Replace("010", "");
+            return (b.Length - b.Replace("010", "").Length) / 3;
+        }
+
+        static HashSet<string> permute(char[] arry, int l, int r, HashSet<string> hs)
+        {
+            if (l == r)
+                hs.Add(new string(arry));
+            else
+            {
+                for (int i = l; i <= r; i++)
+                {
+                    swap(ref arry[l], ref arry[i]);
+                    permute(arry, l + 1, r, hs);
+                    swap(ref arry[l], ref arry[i]); //backtrack
+                }
+            }
+            return hs;
+        }
+
+        static void swap(ref char a, ref char b)
+        {
+            char tmp;
+            tmp = a;
+            a = b;
+            b = tmp;
+        }
+        static string swap1(string s)
+        {
+            string result = "";
+            foreach (var item in s.ToArray())
+            {
+                result += item == '1' ? "0" : "1";
+            }
+            return result;
+        }
+        public static HashSet<string> test(int k, int m, int n, HashSet<string> hs)
+        {
+            HashSet<string> hs1 = new HashSet<string>();
+            if (m == 0)
+                return hs1;
+            if (k == m + n)
+                return hs;
+            if (hs.Count == 0)
+            {
+                hs1.Add("1");
+                hs1.Add("0");
+            }
+            else
+            {
+                for (int i = 0; i < hs.Count; i++)
+                {
+                    int iCount = hs.ElementAt(i).Split("1").Length - 1;
+                    if (iCount < m)
+                        hs1.Add(hs.ElementAt(i) + "1");
+                    if (hs.ElementAt(i).Length - iCount < n)
+                        hs1.Add(hs.ElementAt(i) + "0");
+                }
+            }
+            test(k + 1, m, n, hs1);
+            return hs;
+        }
+        public static HashSet<string> CombArrayZeroOneTwo(int[] c, int m, int n)
+        {
+            HashSet<string> hsTop = new HashSet<string>();
+            HashSet<string> hsBottom = new HashSet<string>();
+            for (int k = 0; k < c.Length; k++)
+            {
+                if (hsTop.Count == 0)
+                {
+                    if (c[k] == 0)
+                    {
+                        hsTop.Add("0");
+                        hsBottom.Add("0");
+                    }
+                    if (c[k] == 2)
+                    {
+                        hsTop.Add("1");
+                        hsBottom.Add("1");
+                    }
+                    if (c[k] == 1)
+                    {
+                        hsTop.Add("1");
+                        hsTop.Add("0");
+                        hsBottom.Add("1");
+                        hsBottom.Add("0");
+                    }
+                    continue;
+                }
+                HashSet<string> hs1 = new HashSet<string>();
+                HashSet<string> hs2 = new HashSet<string>();
+                int iCount = hsTop.Count;
+                for (int i = 0; i < iCount; i++)
+                {
+                    if (c[k] == 2)
+                    {
+                        hs1.Add(hsTop.ElementAt(i) + "1");
+                        hs2.Add(hsBottom.ElementAt(i) + "1");
+                        continue;
+                    }
+                    if (c[k] == 0)
+                    {
+                        hs1.Add(hsTop.ElementAt(i) + "0");
+                        hs2.Add(hsBottom.ElementAt(i) + "0");
+                        continue;
+                    }
+                    int iOne = hsTop.ElementAt(i).Split("1").Length - 1;
+                    int iZero = hsTop.ElementAt(i).Split("0").Length - 1;
+                    int iOne1 = hsBottom.ElementAt(i).Split("1").Length - 1;
+                    int iZero1 = hsBottom.ElementAt(i).Split("0").Length - 1;
+                    if (iOne < m)
+                        hs1.Add(hsTop.ElementAt(i) + "1");
+                    if (iZero1 < m)
+                        hs2.Add(hsBottom.ElementAt(i) + "0");
+                    if (iZero < n)
+                        hs1.Add(hsTop.ElementAt(i) + "0");
+                    if (iOne1 < n)
+                        hs2.Add(hsBottom.ElementAt(i) + "1");
+                }
+                hsTop = hs1;
+                hsBottom = hs2;
+            }
+            return hsTop;
+        }
+        static int utopianTree(int n)
+        {
+            double result = 1;
+            if (n == 0)
+                return 1;
+            for (int i = 1; i <= n; i++)
+            {
+                result = result * (i % 2 == 0 ? 1 : 2) + (i % 2 == 0 ? 1 : 0);
+            }
+            return (int)result;
+        }
+        static string angryProfessor(int k, int[] a)
+        {
+            int ontime = a.Count(o => o <= 0);
+            if (ontime >= k)
+                return "NO";
+            else
+                return "YES";
+
+        }
+        static int beautifulDays(int i, int j, int k)
+        {
+            int result = 0;
+            for (int x = i; x <= j; x++)
+            {
+                if ((reverse(x) - x) % k == 0)
+                    result++;
+            }
+            return result;
+        }
+        public static int reverse(int number)
+        {
+            int reverse = 0;
+            while (number != 0)
+            {
+                reverse = 10 * reverse + number % 10;
+                number = number / 10;
+            }
+            return reverse;
+        }
+        static int viralAdvertising(int n)
+        {
+            int result = 2;
+            int sum = 2;
+            if (n == 1)
+                return 2;
+            else
+            {
+                for (int i = 2; i <= n; i++)
+                {
+                    result = result * 3 / 2;
+                    sum += result;
+                }
+            }
+            return sum;
+
+        }
+        static int saveThePrisoner(int n, int m, int s)
+        {
+
+            int a = s + m - 1;
+            if (a > n)
+            {
+                if (a % n == 0)
+                {
+                    return n;
+                }
+                return a % n;
+            }
+
+            return a;
+        }
+        static int cookies(int k, int[] A)
+        {
+            int result = 0;
+            int iLess = A.Count(o => o < k);
+            int iMore = A.Count(o => o >= k);
+            List<int> list = A.OrderByDescending(o => o).ToList();
+            
+            if (!list.Any(o => o < k))
+                return 0;
+            if (list.Count == 1 && list[0] < k)
+                return -1;
+            int iCount = list.Count;
+            while (iCount > 1)
+            {
+                int sum = list[list.Count - 1] + 2 * list[list.Count - 2];
+                if (sum >= k)
+                {
+                    return result + (int)Math.Ceiling((decimal)list.Count(o => o < k) / 2);
+                }
+                list.RemoveRange(list.Count - 2, 2);
+                int index = list.Count(o => o >= sum);
+                list.Insert(index, sum);
+                result++;
+                if (!list.Any(o => o < k))
+                    break;
+                iCount--;
+            }
+            if (list.Count > 0 && list[0] < k)
+                return -1;
+            return result;
+        }
+
+        // static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
+        // {
+        //     if (length == 1) return list.Select(t => new T[] { t });
+
+        //     return GetPermutations(list, length - 1)
+        //         .SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new T[] { t2 }));
+        // }
+        /////////////
     }
 }
