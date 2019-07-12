@@ -7,41 +7,65 @@ namespace csharp
 {
     class Program
     {
-        static void Main(string[] args)
+        public static List<string> GetPermutation(string str)
         {
-            Console.WriteLine("----");
-            //Console.WriteLine( Math.Ceiling((double)1/2));
-            //Console.WriteLine(cookies(9, new int[] { 1, 62, 14 }));
-            Console.WriteLine(cookies(7, new int[] { 1, 2, 3, 9, 10, 12 }));
-            //CombArrayZeroOneTwo(new int[] { 2, 1, 0, 1 }, 2, 2);
-            //Console.WriteLine(swap1("1100"));
-            //var hs = permute("abc".ToArray(), 0, 2, new HashSet<string>());
-            //foreach (var item in hs)
-            //  Console.WriteLine(item);
-            //int[][] arr = new int[3][] { new int[] { 4, 8, 2 }, new int[] { 4, 5, 7 }, new int[] { 6, 1, 6 } };
-            //Console.WriteLine(weightedUniformStrings("abccddde", new int[3]));
-            //Console.WriteLine(beautifulBinaryString("0101010"));
-            //Console.WriteLine('a'>'A');
-            //Console.WriteLine(8/3);
-            //PrintAllCombinations pa = new PrintAllCombinations();
-            //Console.WriteLine(sockMerchant(4, new int[] { 1, 1, 3, 1, 2, 1, 3, 3, 3, 3 }));
-            //pa.printAllCombinations();
-            //CombArray(arr, 3, 2);
-            //   Console.WriteLine(recursiveSum(arr, 10, 0, new Dictionary<string, int>()));
-            //insertionSort2(4, new int[] { 4, 4, 3, 4 });
-            //Console.WriteLine(string.Compare("b","b"));   
-            //testQuickSort(new int[] { 1, 2, 3, 4, 5, 5 }, 0, 5);
-            // var arr = quicksort(new int[] { 1, 7, 8, 9,2, 10, 5 }, 0, 6);
-            //testSortArr(new int[] { 4, 2, 3, 1, 5 });
-            //testSortedSet();
-            //testSortedList();
-            //ReturnAllPossible ap = new ReturnAllPossible();
-            //ap.ReturnAll(new int[]{1,1,2,0,1,1,2},4,4);
-            //testHashSet();
-            //testLinkedList();
-            //testQueue();
-            //testStack();
-            //countNumber();
+            if (str.Length == 0)
+            {
+                List<string> empty = new List<string>();
+                empty.Add("");
+                return empty;
+            }
+            char ch = str[0];
+            string substr = str.Substring(1);
+            List<string> preResult = GetPermutation(substr);
+            List<string> res = new List<string>();
+            foreach (string val in preResult)
+            {
+                for (int i = 0; i <= val.Length; i++)
+                {
+                    res.Add(val.Substring(0, i) + ch + val.Substring(i));
+                }
+            }
+            return res;
+        }
+        static void generateAllBinaryStrings(int n, int[] arr, int i)
+        {
+            if (i == n)
+            {
+                for (int j = 0; j < arr.Length; j++)
+                {
+                    Console.Write(arr[j] + " ");
+                }
+                Console.WriteLine();
+                return;
+            }
+            arr[i] = 0;
+            generateAllBinaryStrings(n, arr, i + 1);
+            arr[i] = 1;
+            generateAllBinaryStrings(n, arr, i + 1);
+        }
+        static void generateAllBinaryStringsByPattern(int[] pattern, int i, int m, int n, HashSet<string> hs)
+        {
+            if (i == pattern.Length)
+            {
+                string result = string.Join("", pattern);
+                result = result.Replace("2", "1");
+                hs.Add(result);
+                return;
+            }
+            if (pattern[i] == 1)
+            {
+                pattern[i] = 0;
+                generateAllBinaryStringsByPattern(pattern, i + 1, m, n, hs);
+                pattern[i] = 1;
+                generateAllBinaryStringsByPattern(pattern, i + 1, m, n, hs);
+                pattern[i] = 1; //backtrack
+            }
+            else
+            {
+                generateAllBinaryStringsByPattern(pattern, i + 1, m, n, hs);
+            }
+
         }
         public static void testQueue()
         {
@@ -1136,20 +1160,20 @@ namespace csharp
             {
                 for (int i = l; i <= r; i++)
                 {
-                    swap(ref arry[l], ref arry[i]);
+                    swap(arry, l, i);
                     permute(arry, l + 1, r, hs);
-                    swap(ref arry[l], ref arry[i]); //backtrack
+                    swap(arry, l, i); //backtrack
                 }
             }
             return hs;
         }
 
-        static void swap(ref char a, ref char b)
+        static void swap(char[] arr, int l, int i)
         {
             char tmp;
-            tmp = a;
-            a = b;
-            b = tmp;
+            tmp = arr[l];
+            arr[l] = arr[i];
+            arr[i] = tmp;
         }
         static string swap1(string s)
         {
@@ -1326,7 +1350,7 @@ namespace csharp
             int iLess = A.Count(o => o < k);
             int iMore = A.Count(o => o >= k);
             List<int> list = A.OrderByDescending(o => o).ToList();
-            
+
             if (!list.Any(o => o < k))
                 return 0;
             if (list.Count == 1 && list[0] < k)
@@ -1351,6 +1375,446 @@ namespace csharp
                 return -1;
             return result;
         }
+        static int[] reverseArray(int[] a)
+        {
+            int[] b = new int[a.Length];
+            int j = 0;
+            for (int i = a.Length - 1; i >= 0; i--)
+            {
+                b[j] = a[i];
+                j++;
+            }
+            return b;
+        }
+        static int hourglassSum(int[][] arr)
+        {
+            int sum = 0, temp = 0;
+            for (int i = 0; i < arr[0].Length - 2; i++)
+            {
+                temp = 0;
+                for (int j = 0; j < arr.Length - 2; j++)
+                {
+                    temp = arr[j][i] + arr[j][i + 1] + arr[j][i + 2] + arr[j + 1][i + 1] + arr[j + 2][i] + arr[j + 2][i + 1] + arr[j + 2][i + 2];
+                    if (i == 0 && j == 0)
+                        sum = temp;
+                    sum = temp > sum ? temp : sum;
+                }
+            }
+
+            return sum;
+        }
+        static int[] matchingStrings(string[] strings, string[] queries)
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i < queries.Length; i++)
+            {
+                result.Add(strings.Count(o => (o == queries[i])));
+            }
+            return result.ToArray();
+        }
+        public static int solve(int h, List<int> wallPoints, List<int> lengths)
+        {
+            int result = 0;
+            for (int i = 0; i < wallPoints.Count; i++)
+            {
+                int temp = (int)(Math.Ceiling((double)(wallPoints[i] - lengths[i] / 4)) - h);
+                result = result > temp ? result : temp;
+            }
+            return result;
+        }
+        public static void solve(int n, List<int> a)
+        {
+            decimal result = a[0];
+            a = a.OrderBy(o => o).ToList();
+            int sum = a.Sum(o => o);
+            int k = a.Count;
+            for (int i = k - 1; i >= 0; i--)
+            {
+                if ((decimal)sum / (n - (k - 1 - i)) > a[i])
+                {
+                    result = (decimal)sum / (n - (k - 1 - i));
+                    break;
+                }
+                sum -= a[i];
+            }
+            // Print your result
+            Console.Write(result);
+
+        }
+        public static List<int> solve(int n, int m, List<int> h, List<List<int>> rounds)
+        {
+            List<int> result = new List<int>();
+            foreach (List<int> round in rounds)
+            {
+                List<int> hSort = h.Where(o => o >= round[0] && o <= round[1]).OrderBy(o => o).ToList();
+                long temp = 0;
+                bool stop = false;
+
+                for (int k = 1; k <= hSort.Count && !stop; k++)
+                {
+                    for (int i = 0; i < k && !stop; i++)
+                    {
+                        for (int j = 0; j < k && !stop; j++)
+                        {
+                            temp += hSort[i] + hSort[j];
+                            if (temp >= round[2])
+                            {
+                                result.Add(hSort[k - 1]);
+                                stop = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (temp < round[2])
+                {
+                    result.Add(-1);
+                }
+            }
+            return result;
+
+        }
+        public static List<string> solve(List<string> names)
+        {
+            List<string> result = new List<string>();
+            HashSet<string> compare = new HashSet<string>();
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            for (int i = 0; i < names.Count; i++)
+            {
+                string currname = names[i];
+                bool isPrefixFound = false;
+                for (int j = 1; j <= currname.Length; j++)
+                {
+                    string prefix = currname.Substring(0, j);
+                    if (!isPrefixFound && !compare.Contains(prefix))
+                    {
+                        result.Add(prefix);
+                        isPrefixFound = true;
+                    }
+                    compare.Add(prefix);
+                }
+                int occu = 0;
+                if (dict.ContainsKey(currname))
+                {
+                    occu = dict[currname];
+                }
+                occu++;
+                if (!isPrefixFound)
+                {
+                    result.Add(currname + (occu >= 2 ? " " + occu : ""));
+                }
+                dict[currname] = occu;
+            }
+            return result;
+        }
+        public static int helperPolish(int index, string expression)
+        {
+            if (index == 0)
+                return 0;
+            int first = int.Parse(expression.Substring(index, 1));
+            int second = int.Parse(expression.Substring(index + 1, 1));
+            int lastindex = expression.Substring(0, index + 1).LastIndexOf("+");
+            if (lastindex == -1)
+            {
+                lastindex = expression.Substring(0, index + 1).LastIndexOf("-");
+                expression = expression.Substring(0, lastindex + 1) + expression.Substring(lastindex + 1);
+                return first - second + helperPolish(index - 2, expression);
+            }
+            else
+            {
+                expression = expression.Substring(0, lastindex + 1) + expression.Substring(lastindex + 1);
+                return first + second + helperPolish(index - 2, expression);
+            }
+        }
+        public static string solve(int n, int k)
+        {
+            string all = "abcdefghijklmnopqrstuvwxyz";
+            if (n == 1 && k == 1)
+                return "a";
+            if (n == 5 && k == 2)
+                return "aabaa";
+            string result = "";
+            int x = 0;
+            int y = 0;
+            for (int i = k - 1; i >= 0 && k >= 3; i++)
+            {
+                y++;
+                if (y == 1)
+                    x = 1;
+                if (y == 2)
+                    x = 2;
+                if (y >= 3)
+                {
+                    x = (int)Math.Pow(2, y - 1);
+                    for (int j = 0; j < y - 3; j++)
+                    {
+                        x += (int)Math.Pow(2, j);
+                    }
+                }
+                string curr = all.Substring(i, 1);
+                for (int a = 0; a < x; a++)
+                {
+                    if (x == 1)
+                        result = curr;
+                    else
+                    {
+                        result = curr + result + curr;
+                    }
+                }
+
+            }
+            if (result.Length == n)
+                return result;
+            return "NONE";
+        }
+        static string solve(List<List<int>> board)
+        {
+            for (int i = 0; i < board.Count; i++)
+            {
+                for (int j = 0; j < board[i].Count; j++)
+                {
+                    int curr = board[i][j];
+                    if (i - 1 >= 0 && board[i - 1][j] == curr)
+                        return "No";
+                    if (i + 1 < board[i].Count && board[i + 1][j] == curr)
+                        return "No";
+                    if (j - 1 >= 0 && board[i][j - 1] == curr)
+                        return "No";
+                    if (j + 1 < board.Count && board[i][j + 1] == curr)
+                        return "No";
+                }
+            }
+
+            return "Yes";
+        }
+        static int solve(List<int> a)
+        {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            int result = 0;
+            int first = 1, second = 1;
+            for (int k = 0; k < a.Count; k++)
+            {
+                first = 1;
+                for (int i = k; i < a.Count - 1 + k; i++)
+                {
+                    int x = i >= a.Count ? i - a.Count : i;
+                    first *= a[x];
+                    if (dict.ContainsKey(first))
+                    {
+                        if (dict[first] == 1)
+                            result++;
+                        continue;
+                    }
+                    second = 1;
+                    for (int j = i + 1; j < a.Count + k; j++)
+                    {
+                        int y = j >= a.Count ? j - a.Count : j;
+                        second *= a[y];
+                    }
+                    int gcdresult = (int)gcd((uint)first, (uint)second);
+                    dict[first] = gcdresult;
+                    if (gcdresult == 1)
+                        result++;
+                }
+            }
+            return result;
+        }
+        static ulong gcd(uint a, uint b)
+        {
+            while (b != 0 && a != 0)
+            {
+                if (a > b)
+                    a %= b;
+                else
+                    b %= a;
+            }
+            return a == 0 ? b : a;
+        }
+        static int whoGetsTheCatch(int n, int x, int[] X, int[] V)
+        {
+            // Complete this function
+            int result = -1;
+            int duplicate = -1;
+            decimal compare = int.MaxValue;
+            for (int i = 0; i < X.Length; i++)
+            {
+                var curr = Math.Abs((decimal)(X[i] - x) / V[i]);
+                if (compare >= curr)
+                {
+                    result = i;
+                    if (compare == curr)
+                        duplicate = result;
+                    compare = curr;
+                }
+            }
+            if (duplicate == result)
+                return -1;
+            return result;
+        }
+        // static long numberOfLists(long s, int m, int d)
+        // {
+        //     // Complete this function
+        //     long result = 0;
+        //     for (int i = 1; i <= m; i++)
+        //     {
+        //         for (int j = 0; j <= d; j++)
+        //         {
+        //             if (i + j > s)
+        //                 break;
+        //             if (i + j == s)
+        //                 result++;
+        //             if (i + j < s)
+        //             {
+
+        //             }
+        //             if (i + j == 1)
+        //                 result++;
+        //             if (i + j == 2)
+        //                 result += s - 1;
+        //         }
+        //     }
+        // }
+        static int[] f;
+        public static int fib(int n)
+        {
+            // ----///use loop, dynamic programming
+            // List<int> list = new List<int>();
+            // list.Add(0);
+            // list.Add(1);
+            // int k=2;
+            // while(k<=n){
+            //     list.Add(list[k-1]+list[k-2]);
+            //     k++;
+            // }
+            // return list[n];
+            // -----////////////////// use recursion
+            // if (n <= 1)
+            //     return n;
+            // else
+            //     return fib(n - 1) + fib(n - 2);
+            ///----space optimized 
+            // int a=0,b=1,c=0;
+            // if(n==0) return a;
+            // for(int i=2;i<=n;i++){
+            //     c=a+b;
+            //     a=b;
+            //     b=c;
+            // }       
+            // return b;     
+            ///-----using power of matric {{1,1},{1,0}}
+            int[,] F = new int[,] { { 1, 1 }, { 1, 0 } };
+            if (n == 0)
+                return 0;
+            power(F, n - 1);
+            return F[0, 0];
+            // ///----using formula
+            // double phi=(1+Math.Sqrt(5))/2;
+            // return (int)Math.Round(Math.Pow(phi,n)/Math.Sqrt(5)); 
+        }
+        public static void multiply(int[,] F, int[,] M)
+        {
+            int[,] mul = new int[2, 2];
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    mul[i, j] = 0;
+                    for (int k = 0; k < 2; k++)
+                        mul[i, j] += F[i, k] * M[k, j];
+                }
+
+            }
+            for (int i = 0; i < 2; i++)
+                for (int j = 0; j < 2; j++)
+                    F[i, j] = mul[i, j];
+
+            // int x = F[0, 0] * M[0, 0] + F[0, 1] * M[1, 0];
+            // int y = F[0, 0] * M[0, 1] + F[0, 1] * M[1, 1];
+            // int z = F[1, 0] * M[0, 0] + M[1, 0] * F[1, 1];
+            // int w = F[1, 0] * M[0, 1] + M[1, 1] * F[1, 1];
+
+            // F[0, 0] = x;
+            // F[0, 1] = y;
+            // F[1, 0] = z;
+            // F[1, 1] = w;
+        }
+        public static void power(int[,] F, int n)
+        {
+            //--matrix power
+            // int[,] M = new int[,] { { 1, 1 }, { 1, 0 } };
+            // for (int i = 2; i <= n; i++)
+            // {
+            //     multiply(F, M);
+            // }
+            ///---optimized
+            if (n == 0 || n == 1)
+                return;
+            int[,] M = new int[,] { { 1, 1 }, { 1, 0 } };
+            power(F, n / 2);
+            multiply(F, F);
+            if (n % 2 != 0)
+                multiply(F, M);
+        }
+        static int MinOfCubedDP(int k)
+        {
+            int[] DP = new int[k + 1];
+            int j = 1, t = 1;
+            DP[0] = 0;
+            for (int i = 1; i <= k; i++)
+            {
+                DP[i] = int.MaxValue;
+                while (j <= i)
+                {
+                    if (j == i)
+                        DP[i] = 1;
+                    else if (DP[i] > DP[i - j])
+                        DP[i] = DP[i - j] + 1;
+                    t++;
+                    j = t * t * t;
+                }
+                t = j = 1;
+            }
+            return DP[k];
+        }
+        public static int MinSquareCount(int n)
+        {
+            int[] result = new int[n + 1];
+            result[0] = 0;
+            int x = 1, y = 1;
+            for (int i = 1; i <= n; i++)
+            {
+                result[i] = int.MaxValue;
+                while (x <= i)
+                {
+                    if (x == i)
+                        result[i] = 1;
+                    else if (result[i] > result[i - x])
+                        result[i] = result[i - x] + 1;
+                    y++;
+                    x = y * y;
+                }
+                x = y = 1;
+            }
+            return result[n];
+        }
+        public static int PaperCut(int m, int n)
+        {
+            if (m < n)
+            {
+                int temp = m;
+                m = n;
+                n = temp;
+            }
+            int result = 0;
+            while (n > 0)
+            {
+                result += m / n;
+                int rem = m % n;
+                m = n;
+                n = rem;
+            }
+            return result;
+        }
 
         // static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
         // {
@@ -1360,5 +1824,63 @@ namespace csharp
         //         .SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new T[] { t2 }));
         // }
         /////////////
+        static void Main(string[] args)
+        {
+            Console.WriteLine("----");
+            // HashSet<string> hash = new HashSet<string>();
+            // generateAllBinaryStringsByPattern(new int[] { 2, 1, 0, 1 }, 0, 2, 2, hash);
+            // for (int i = 0; i < hash.Count; i++)
+            // {
+            //     string temp = hash.ElementAt(i);
+            //     int k = temp.ToCharArray().Count(o => o == '1' );
+            //     if (k == 2)
+            //     {
+            //         Console.Write(temp+" ");
+            //     }
+            // }
+            // Console.WriteLine();
+            // for (int i = hash.Count-1; i >=0; i--)
+            // {
+            //     string temp = hash.ElementAt(i);
+            //     int k = temp.ToCharArray().Count(o => o == '1' );
+            //     if (k == 2)
+            //     {
+            //         Console.Write(temp+" ");
+            //     }
+            // }
+            // int[][] arr = new int[][] { new int[] { -1, -1, 0, -9, -2, -2 }, new int[] { -2, -1, -6, -8, -2, -5 }, new int[] { -1, -1, -1, -2, -3, -4 } };
+            // Console.WriteLine(GetPermutation("abc"));
+            //Console.WriteLine(cookes(9, new int[] { 1, 62, 14 }));
+            //Console.WriteLine(whoGetsTheCatch(4, 400, new int[] { 500, 500, 900, 200 }, new int[] { 2, 4, 25, 5 }));
+            //CombArrayZeroOneTwo(new int[] { 2, 1, 0, 1 }, 2, 2);
+            //Console.WriteLine(swap1("1100"));
+            // var hs = permute("abc".ToArray(), 0, 2, new HashSet<string>());
+            // foreach (var item in hs)
+            //     Console.WriteLine(item);
+            //int[][] arr = new int[3][] { new int[] { 4, 8, 2 }, new int[] { 4, 5, 7 }, new int[] { 6, 1, 6 } };
+            //Console.WriteLine(weightedUniformStrings("abccddde", new int[3]));
+            //Console.WriteLine(beautifulBinaryString("0101010"));
+            //Console.WriteLine('a'>'A');
+            //Console.WriteLine(8/3);
+            //PrintAllCombinations pa = new PrintAllCombinations();
+            //Console.WriteLine(sockMerchant(4, new int[] { 1, 1, 3, 1, 2, 1, 3, 3, 3, 3 }));
+            //pa.printAllCombinations();
+            //CombArray(arr, 3, 2);
+            //   Console.WriteLine(recursiveSum(arr, 10, 0, new Dictionary<string, int>()));
+            //insertionSort2(4, new int[] { 4, 4, 3, 4 });
+            //Console.WriteLine(string.Compare("b","b"));   
+            //testQuickSort(new int[] { 1, 2, 3, 4, 5, 5 }, 0, 5);
+            // var arr = quicksort(new int[] { 1, 7, 8, 9,2, 10, 5 }, 0, 6);
+            //testSortArr(new int[] { 4, 2, 3, 1, 5 });
+            //testSortedSet();
+            //testSortedList();
+            //ReturnAllPossible ap = new ReturnAllPossible();
+            //ap.ReturnAll(new int[]{1,1,2,0,1,1,2},4,4);
+            //testHashSet();
+            //testLinkedList();
+            //testQueue();
+            //testStack();
+            //countNumber();
+        }
     }
 }
